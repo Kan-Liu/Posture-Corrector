@@ -12,25 +12,27 @@ const Camera = () => {
 
     const capture = React.useCallback(
         () => {
-        const imageSrc = webcamRef.current.getScreenshot();
+            const imageSrc = webcamRef.current.getScreenshot();
+            console.log(webcamRef.current);
+            console.log(imageSrc);
         },
         [webcamRef]
     );
 
     return (
-    <>
-        <Webcam
-            audio={false}
-            height={720}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            width={1280}
-            videoConstraints={videoConstraints}
-        />
-        <button onClick={capture}>Capture photo</button>
-    </>
-);
-  };
+        <>
+            <Webcam
+                audio={false}
+                height={720}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                width={1280}
+                videoConstraints={videoConstraints}
+            />
+            <button onClick={capture}>Capture photo</button>
+        </>
+    );
+};
 
 
 export default Camera;
