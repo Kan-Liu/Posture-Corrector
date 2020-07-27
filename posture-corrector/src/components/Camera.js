@@ -1,13 +1,12 @@
 import React from "react";
 import Webcam from "react-webcam";
+import '../App.css';
  
 const videoConstraints = {
-    width: 1280,
-    height: 720,
     facingMode: "user"
   };
    
-const Camera = () => {
+export const Camera = () => {
     const webcamRef = React.useRef(null);
 
     const capture = React.useCallback(
@@ -18,19 +17,18 @@ const Camera = () => {
     );
 
     return (
-    <>
+    <div className="Camera">
         <Webcam
             audio={false}
-            height={720}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
-            width={1280}
+            width={360}
+            height={360}
             videoConstraints={videoConstraints}
         />
         <button onClick={capture}>Capture photo</button>
-    </>
+    </div>
 );
   };
 
-
-export default Camera;
+// export default Camera;
