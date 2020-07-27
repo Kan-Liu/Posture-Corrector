@@ -1,10 +1,12 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Camera from './components/Camera';
 
 function App() {
   return (
     <div className="App">
+      <Camera />
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
