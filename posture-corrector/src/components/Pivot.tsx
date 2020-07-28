@@ -18,7 +18,6 @@ export const PivotBar: React.FunctionComponent = () => {
           'data-title': 'Posture Camera Title',
         }}
       >
-        <Label styles={labelStyles}>Camera</Label>
         <Camera/>
       </PivotItem>
       <PivotItem headerText="Notifications">
