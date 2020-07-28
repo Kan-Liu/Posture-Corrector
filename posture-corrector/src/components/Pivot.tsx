@@ -11,7 +11,7 @@ const labelStyles: Partial<IStyleSet<ILabelStyles>> = {
 
 export const PivotBar: React.FunctionComponent = () => {
   return (
-    <Pivot aria-label="Basic Pivot Example">
+    <Pivot aria-label="Menu Pivot">
       <PivotItem
         headerText="Posture Camera"
         headerButtonProps={{
@@ -19,7 +19,6 @@ export const PivotBar: React.FunctionComponent = () => {
           'data-title': 'Posture Camera Title',
         }}
       >
-        <Label styles={labelStyles}>Camera</Label>
         <Camera/>
       </PivotItem>
       <PivotItem headerText="Notifications Preferences">
