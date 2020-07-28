@@ -16,25 +16,34 @@ export async function returnPose(input) {
 		let pose = poses[i].pose;
         var keypoints = {
 			left_shoulder: {
-				"x": pose.leftShoulder.x,
-				"y": pose.leftShoulder.y
+				x: pose.leftShoulder.x,
+				y: pose.leftShoulder.y
 			},
 			right_shoulder: {
-				"x": pose.rightShoulder.x,
-				"y": pose.rightShoulder.y
+				x: pose.rightShoulder.x,
+				y: pose.rightShoulder.y
 			},
 			nose: {
-				"x": pose.nose.x,
-				"y": pose.nose.y
+				x: pose.nose.x,
+				y: pose.nose.y
 			},
 			left_ear: {
-				"x": pose.leftEar.x,
-				"y": pose.leftEar.y
+				x: pose.leftEar.x,
+				y: pose.leftEar.y
 			},
 			right_ear: {
-				"x": pose.rightEar.x,
-				"y": pose.rightEar.y
+				x: pose.rightEar.x,
+				y: pose.rightEar.y
 			},
+			left_eye: {
+				x: pose.leftEye.x,
+				y: pose.leftEye.y,
+			},
+			right_eye: {
+				x: pose.rightEye.x,
+				y: pose.rightEye.y,
+			},
+			}
 		};
 			
 			}
