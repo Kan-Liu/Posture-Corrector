@@ -14,7 +14,8 @@ export const Camera = () => {
 
     const capture = React.useCallback(
         async () => {
-            // const imageSrc = webcamRef.current.getScreenshot();
+           
+            
             const cameraElement = document.getElementsByClassName("Camera")[0].firstChild;
             var keypoints = await PoseDetection.returnPose(cameraElement);
             console.log(keypoints);

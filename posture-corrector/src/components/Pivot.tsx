@@ -19,6 +19,7 @@ export const PivotBar: React.FunctionComponent = () => {
         }}
       >
         <Label styles={labelStyles}>Camera</Label>
+        <Camera/>
       </PivotItem>
       <PivotItem headerText="Notifications">
         <Label styles={labelStyles}>Customize reminders</Label>
