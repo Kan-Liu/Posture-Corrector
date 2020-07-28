@@ -4,6 +4,7 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { IStyleSet } from 'office-ui-fabric-react/lib/Styling';
 import {Camera} from './Camera';
 import {Draw} from './Camera';
+import { Notifications } from './Notifications';
 
 const labelStyles: Partial<IStyleSet<ILabelStyles>> = {
   root: { marginTop: 10 },
@@ -24,6 +25,7 @@ export const PivotBar: React.FunctionComponent = () => {
       </PivotItem>
       <PivotItem headerText="Notifications">
         <Label styles={labelStyles}>Customize reminders</Label>
+        <Notifications/>
       </PivotItem>
     </Pivot>
   );
