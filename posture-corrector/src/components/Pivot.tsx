@@ -22,8 +22,8 @@ export const PivotBar: React.FunctionComponent = () => {
         <Label styles={labelStyles}>Camera</Label>
         <Camera/>
       </PivotItem>
-      <PivotItem headerText="Notifications">
-        <Label styles={labelStyles}>Customize your reminders</Label>
+      <PivotItem headerText="Notifications Preferences">
+        <Label styles={labelStyles}>Choose which reminders you want to receive</Label>
         <Notifications/>
       </PivotItem>
     </Pivot>
