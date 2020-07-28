@@ -46,8 +46,6 @@ export async function returnPose(input) {
 			}
 		};
 			
-			}
-		
 		return keypoints;
 		}
 	
