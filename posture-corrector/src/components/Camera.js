@@ -3,7 +3,7 @@ import Webcam from "react-webcam";
 import '../App.css';
 import Sketch from "react-p5";
 import * as PoseDetection from "../backend/PoseDetection";
-import { PrimaryButton } from 'office-ui-fabric-react/lib/';
+import { PrimaryButton, CompoundButton, Stack } from 'office-ui-fabric-react';
  
 const videoConstraints = {
   facingMode: "user"
@@ -11,6 +11,7 @@ const videoConstraints = {
 
 export const Camera = () => {
   const webcamRef = React.useRef(null);
+  const stackTokens = { childrenGap: 40 };
   const [webcamEnabled, setWebcamEnabled] = React.useState(false);
   const [lastImage, setLastImage] = React.useState(null);
 
@@ -34,22 +35,32 @@ export const Camera = () => {
   };
 
   return (<>
-    <div className="Camera">
-      {webcamEnabled ? (
-        <Webcam
-          audio={false}
-          screenshotFormat="image/jpeg"
-          width={640}
-          height={360}
-          ref={webcamRef}
-          videoConstraints={videoConstraints}
-          onUserMedia={() => {
-            setTimeout(capture, 200); }}
-        />
-      ) : (
-        <img src={lastImage} />
-      )}
+    <div className="camera-container">
+      <Stack horizontal tokens={stackTokens}>
+          <CompoundButton onClick={onCaptureClick} secondaryText="The posture you wish to erase">
+              Capture your normal pose 
+          </CompoundButton>
+          <CompoundButton primary onClick={onCaptureClick} secondaryText="Shoulders straight, arms relaxed">
+              Capture your desired pose
+          </CompoundButton>
+      </Stack>
+
+      <div style={{paddingBottom: "3vh"}}></div>
+
+      {webcamEnabled ? (<Webcam
+        audio={false}
+        screenshotFormat="image/jpeg"
+        width={640}
+        height={360}
+        ref={webcamRef}
+        videoConstraints={videoConstraints}
+        onUserMedia={() => {
+          setTimeout(capture, 200); }}
+      />) : (<img src={lastImage} />)}
     </div>
+
+    <div style={{paddingBottom: "3vh"}}></div>
+
     <PrimaryButton 
       text="Capture Photo"
       onClick={onCaptureClick}
