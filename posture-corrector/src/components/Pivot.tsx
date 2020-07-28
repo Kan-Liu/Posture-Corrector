@@ -3,7 +3,6 @@ import { Label, ILabelStyles } from 'office-ui-fabric-react/lib/Label';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { IStyleSet } from 'office-ui-fabric-react/lib/Styling';
 import {Camera} from './Camera';
-import {Draw} from './Camera';
 
 const labelStyles: Partial<IStyleSet<ILabelStyles>> = {
   root: { marginTop: 10 },
@@ -20,7 +19,6 @@ export const PivotBar: React.FunctionComponent = () => {
         }}
       >
         <Label styles={labelStyles}>Camera</Label>
-        <Camera/>
       </PivotItem>
       <PivotItem headerText="Notifications">
         <Label styles={labelStyles}>Customize reminders</Label>
