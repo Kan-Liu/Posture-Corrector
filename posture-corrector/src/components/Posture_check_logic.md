@@ -1,4 +1,5 @@
 # Posture Corrector Code logic
+
 ```
 Legends:
   - REye: right eye
@@ -10,21 +11,23 @@ Legends:
   - N: nose
   - x_: x coordinate
   - y_: y coordinate
- ```
+Left:x > Right:x
+Shoulder:y > Nose:y > Eye:y
+```
+
 - Anti-slouching
   - Eye line/Nose getting closer to shoulder line:
-    - (y_Nose - avg(y_RS, y_LS))- -
-    - (avg(y_REye, y_LEye) - avg(y_RS, y_LS))- -
+    - (avg(y_RS, y_LS) - y_Nose)--
+    - (avg(y_RS, y_LS) - avg(y_REye, y_LEye))--
 - Getting too close to camera
   - Shoulder distance increases by a lot:
-    - (x_RS - x_LS)+++
+    - (x_LS - x_RS)+++
 - Foward leaning:
   - Eye distance/shoulder distance ratio increases by a lot:
-    - (x_REye - x_LEye)/(x_RS - x_LS)+++
+    - (x_LEye - x_REye)/(x_LS - x_RS)+++
 - Tilted head:
   - Ear-shoulder distance unequal on left and right:
-    - (y_REar - y_RS) != (y_LEar - y_LS)
+    - (y_RS - y_REar) != (y_LS - y_LEar)
 - Spending too much time on computer (for customizable time):
-    - On computer for too long:
-        - no change for too long
-    
+  - On computer for too long:
+    - no change for too long
