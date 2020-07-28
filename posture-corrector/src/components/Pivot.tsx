@@ -23,7 +23,7 @@ export const PivotBar: React.FunctionComponent = () => {
         <Camera/>
       </PivotItem>
       <PivotItem headerText="Notifications">
-        <Label styles={labelStyles}>Customize reminders</Label>
+        <Label styles={labelStyles}>Customize your reminders</Label>
         <Notifications/>
       </PivotItem>
     </Pivot>

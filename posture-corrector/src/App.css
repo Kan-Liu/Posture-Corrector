@@ -42,3 +42,16 @@
 .Camera {
   align-items: center;
 }
+
+/* Notifications */
+
+.notifications {
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.notifications-container {
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}

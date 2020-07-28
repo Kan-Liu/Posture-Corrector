@@ -2,33 +2,54 @@ import React from "react";
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import { store } from "react-notifications-component";
+import { DefaultButton, PrimaryButton, Stack } from 'office-ui-fabric-react';
+import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { Label } from 'office-ui-fabric-react/lib/Label';
+
+const dropdownStyles = {
+  dropdown: { width: 300 },
+};
+
+const options = [
+  { key: 'minutesHeader', text: 'Minutes', itemType: DropdownMenuItemType.Header },
+  { key: 'oneMin', text: '1 minute' },
+  { key: 'twoMins', text: '2 minutes' },
+  { key: 'threeMins', text: '3 minutes'},
+  { key: 'fiveMins', text: '5 minutes' },
+  { key: 'fiveMins', text: '10 minutes' },
+  { key: 'fiveMins', text: '15 minutes' },
+  { key: 'fiveMins', text: '25 minutes' },
+  { key: 'fiveMins', text: '30 minutes' },
+  { key: 'fiveMins', text: '40 minutes' },
+  { key: 'divider_1', text: '-', itemType: DropdownMenuItemType.Divider },
+  { key: 'hoursHeader', text: 'Hours', itemType: DropdownMenuItemType.Header },
+  { key: 'oneHour', text: '1 hour' },
+  { key: 'twoHours', text: '2 hours' },
+  { key: 'threeHours', text: '3 hours' },
+];
+
+const stackTokens = { childrenGap: 30 };
 
 export class Notifications extends React.Component {
   render() {
     return (
-      <>
-        <button>
+      <div className="notifications-container">
+        <DefaultButton>
           Add a custom notification
-        </button>
-        <div id="new-notification">
-          <label htmlFor="notification-title">Notification Title: </label>
-          <input
-            type="text"
-            id="notification-title"
-            name="notification-title"
-          ></input>
-          <label htmlFor="repeat-time">Repeat Time: </label>
-          <select id="repeat-time" name="repeat-time">
-              <option value="30mins">Every half hour</option>
-              <option value="hourly">Every hour</option>
-              <option value="2hourly">Every 2 hours</option>
-              <option value="3hourly">Every 3 hours</option>
-              <option value="daily">Once a day</option>
-          </select>
-          <br/>
-        </div>
-        <div>
-        <button
+        </DefaultButton>
+
+        <Stack horizontal tokens={stackTokens} verticalAlign="start" className="notifications">
+          <Toggle label="Receive notifications" onText="Yes" offText="No" />
+          <TextField label="Notification Title" id={"notification-title"} />
+          <Dropdown
+            label="Repeat Time"
+            options={options}
+          />
+        </Stack>
+
+        <PrimaryButton
           onClick={() => {
             store.addNotification({
               title: "Dropbox",
@@ -44,9 +65,8 @@ export class Notifications extends React.Component {
           }}
         >
           Add notification
-        </button>
-        </div>
-      </>
+        </PrimaryButton>
+      </div>
     );
   }
 
