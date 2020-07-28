@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Label, ILabelStyles } from 'office-ui-fabric-react/lib/Label';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import { IStyleSet } from 'office-ui-fabric-react/lib/Styling';
-import {Camera} from './Camera';
+import { Camera } from './Camera';
 
 const labelStyles: Partial<IStyleSet<ILabelStyles>> = {
   root: { marginTop: 10 },
@@ -10,7 +10,7 @@ const labelStyles: Partial<IStyleSet<ILabelStyles>> = {
 
 export const PivotBar: React.FunctionComponent = () => {
   return (
-    <Pivot aria-label="Basic Pivot Example">
+    <Pivot aria-label="Menu Pivot">
       <PivotItem
         headerText="Posture Camera"
         headerButtonProps={{
