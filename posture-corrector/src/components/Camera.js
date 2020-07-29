@@ -27,20 +27,22 @@ export const Camera = () => {
 
     const img = new Image();
     img.src = imageSrc;
-    img.onload = async () => {
+    img.onload = () => {
       console.log("Loaded image!");
-      var keypoints = await PoseDetection.returnPose(img);
-      console.log(keypoints);
-      if (lastButton === "capture") {
-        ControlLogic.anti_slouching(goodReference, badReference, keypoints);
-        ControlLogic.too_close_to_camera(goodReference, keypoints);
-        ControlLogic.forward_leaning(goodReference, badReference, keypoints);
-        ControlLogic.tilted_head(goodReference, keypoints);
-      } else if (lastButton === "goodReference") {
-        setGoodReference(keypoints);
-      } else if (lastButton === "badReference") {
-        setBadReference(keypoints);
-      }
+      setTimeout(async () => {
+        var keypoints = await PoseDetection.returnPose(img);
+        console.log(keypoints);
+        if (lastButton === "capture") {
+          ControlLogic.anti_slouching(goodReference, badReference, keypoints);
+          ControlLogic.too_close_to_camera(goodReference, keypoints);
+          ControlLogic.forward_leaning(goodReference, badReference, keypoints);
+          ControlLogic.tilted_head(goodReference, keypoints);
+        } else if (lastButton === "goodReference") {
+          setGoodReference(keypoints);
+        } else if (lastButton === "badReference") {
+          setBadReference(keypoints);
+        }
+      }, 50);
     };
   }, [webcamRef, goodReference, badReference, lastButton]);
 
@@ -56,17 +58,20 @@ export const Camera = () => {
         <Stack horizontal tokens={stackTokens}>
           <CompoundButton
             onClick={() => onCaptureClick("badReference")}
-            secondaryText="The posture you wish to erase"
+            secondaryText="Hunched shoulders, leaning forward"
           >
-            Capture your normal pose
+            1. Capture your undesired posture
           </CompoundButton>
-          <CompoundButton
-            primary
-            onClick={() => onCaptureClick("goodReference")}
-            secondaryText="Shoulders straight, arms relaxed"
-          >
-            Capture your desired pose
-          </CompoundButton>
+
+          {badReference && (
+            <CompoundButton
+              primary
+              onClick={() => onCaptureClick("goodReference")}
+              secondaryText="Shoulders straight, arms relaxed"
+            >
+              2. Capture your desired posture
+            </CompoundButton>
+          )}
         </Stack>
 
         <div style={{ paddingBottom: "3vh" }}></div>
@@ -90,10 +95,12 @@ export const Camera = () => {
 
       <div style={{ paddingBottom: "3vh" }}></div>
 
-      <PrimaryButton
-        text="Capture Photo"
-        onClick={() => onCaptureClick("capture")}
-      />
+      {(goodReference && badReference) && (
+        <PrimaryButton
+          text="Process Posture"
+          onClick={() => onCaptureClick("capture")}
+        />
+      )}
     </>
   );
 };

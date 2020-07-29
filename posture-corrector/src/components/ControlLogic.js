@@ -39,7 +39,7 @@ export function anti_slouching(good_reference, bad_reference, current) {
 export function too_close_to_camera(good_reference, current) {
   // Larger score is worse
   var calculate_score = (keypoints) => {
-    return keypoints.leftShoulder.x - keypoints.rightShoulder.x;
+    return keypoints.leftEye.x - keypoints.rightEye.x;
   };
   var good_reference_score = calculate_score(good_reference);
   var current_score = calculate_score(current);
@@ -57,10 +57,11 @@ export function too_close_to_camera(good_reference, current) {
 }
 
 export function forward_leaning(good_reference, bad_reference, current) {
+  return;
   // Larger score is worse
   var calculate_score = (keypoints) => {
     return (
-      (keypoints.leftEye - keypoints.rightEye) /
+      (keypoints.leftEye.x - keypoints.rightEye.x) /
       (keypoints.leftShoulder.x - keypoints.rightShoulder.x)
     );
   };
@@ -108,6 +109,9 @@ function long_screen_time(reference, current) {}
 
 function trigger_notification(title, reason, type) {
   type = type || "warning";
+  var notification = new Notification(title, {
+    "body": reason
+  });
   store.addNotification({
     title: title,
     message: reason,

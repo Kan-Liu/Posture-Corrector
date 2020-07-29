@@ -16,7 +16,7 @@ export class Notifications extends React.Component {
       stagnantEnabled: false,
       notificationsPostureTime: null,
       notificationsStagnantTime: null
-    }
+    };
   }
 
   render() {
