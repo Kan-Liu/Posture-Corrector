@@ -88,8 +88,8 @@ export function forward_leaning(good_reference, bad_reference, current) {
 export function tilted_head(good_reference, current) {
   // More unequal is worse
   var calculate_score = (keypoints) => {
-    var right_score = current.rightShoulder.y - reference.rightEar.y;
-    var left_score = current.leftShoulder.y - current.leftEar.y;
+    var right_score = keypoints.rightShoulder.y - keypoints.rightEar.y;
+    var left_score = keypoints.leftShoulder.y - keypoints.leftEar.y;
     return Math.abs(right_score - left_score);
   };
 
@@ -97,12 +97,7 @@ export function tilted_head(good_reference, current) {
   var current_score = calculate_score(current);
   var good_bad_threshold = good_reference_score * (1 + TILTED_HEAD_THRESHOLD);
 
-  console.log(
-    good_reference_score,
-    bad_reference_score,
-    current_score,
-    good_bad_threshold
-  );
+  console.log(good_reference_score, current_score, good_bad_threshold);
 
   if (current_score > good_bad_threshold) {
     trigger_notification(
