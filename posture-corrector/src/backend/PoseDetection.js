@@ -8,13 +8,13 @@ export async function returnPose(input) {
   var poses = await model.singlePose(input);
   const pose = poses[0].pose;
   const keys = {
-    leftShoulder: "left_shoulder",
-    rightShoulder: "right_shoulder",
+    leftShoulder: "leftShoulder",
+    rightShoulder: "rightShoulder",
     nose: "nose",
-    leftEar: "left_ear",
-    rightEar: "right_ear",
-    leftEye: "left_eye",
-    rightEye: "right_eye"
+    leftEar: "leftEar",
+    rightEar: "rightEar",
+    leftEye: "leftEye",
+    rightEye: "rightEye",
   };
   var keypoints = {};
   for (var key in keys) {
