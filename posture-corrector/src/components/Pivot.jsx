@@ -10,12 +10,8 @@ const labelStyles = {
 
 export const PivotBar = (props) => {
   const {
-    setPostureEnabled,
-    setStagnantEnabled,
     setPostureTime,
     setStagnantTime,
-    postureEnabled,
-    stagnantEnabled,
     postureTime,
     stagnantTime
   } = props;
@@ -34,14 +30,10 @@ export const PivotBar = (props) => {
       <PivotItem headerText="Notifications Preferences">
         <Label styles={labelStyles}>Choose which reminders you want to receive</Label>
         <Notifications 
-          setPostureEnabled={setPostureEnabled}
-          setStagnantEnabled={setStagnantEnabled}
-          setPostureTime={setPostureTime}
-          setStagnantTime={setStagnantTime}
-          postureEnabled={postureEnabled}
-          stagnantEnabled={stagnantEnabled}
-          postureTime={postureTime}
-          stagnantTime={stagnantTime}
+         setPostureTime={setPostureTime}
+         setStagnantTime={setStagnantTime}
+         postureTime={postureTime}
+         stagnantTime={stagnantTime}
         />
       </PivotItem>
     </Pivot>

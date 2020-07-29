@@ -4,22 +4,16 @@ import { PivotBar } from './components/Pivot.jsx';
 import ReactNotifications from 'react-notifications-component';
 
 function App() {
-  const [postureEnabled, setPostureEnabled] = React.useState(false);
-  const [stagnantEnabled, setStagnantEnabled] = React.useState(false);
-  const [postureTime, setPostureTime] = React.useState('Enter a number');
-  const [stagnantTime, setStagnantTime] = React.useState('Enter a number');
-
+  const [postureTime, setPostureTime] = React.useState(-1); // -1 means notifications not enabled
+  const [stagnantTime, setStagnantTime] = React.useState(-1);
+  
   return (
     <div className="App">
-            <ReactNotifications/>
+      <ReactNotifications/>
 
       <PivotBar 
-        setPostureEnabled={setPostureEnabled}
-        setStagnantEnabled={setStagnantEnabled}
         setPostureTime={setPostureTime}
         setStagnantTime={setStagnantTime}
-        postureEnabled={postureEnabled}
-        stagnantEnabled={stagnantEnabled}
         postureTime={postureTime}
         stagnantTime={stagnantTime}
       />
