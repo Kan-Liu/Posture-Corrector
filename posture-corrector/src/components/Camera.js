@@ -33,6 +33,9 @@ export const Camera = () => {
       console.log(keypoints);
       if (lastButton === "capture") {
         ControlLogic.anti_slouching(goodReference, badReference, keypoints);
+        ControlLogic.too_close_to_camera(goodReference, keypoints);
+        ControlLogic.forward_leaning(goodReference, badReference, keypoints);
+        ControlLogic.tilted_head(goodReference, keypoints);
       } else if (lastButton === "goodReference") {
         setGoodReference(keypoints);
       } else if (lastButton === "badReference") {

@@ -1,10 +1,10 @@
 import { store } from "react-notifications-component";
 
-const ANTI_SLOUCHING_THRESHOLD = 10;
-const TOO_CLOSE_TO_CAMERA_THRESHOLD = 10;
-const FORWARD_LEANING_THRESHOLD = 10;
-const TILTED_HEAD_THRESHOLD = 10;
-const LONG_SCREEN_TIME_THRESHOLD = 10;
+const ANTI_SLOUCHING_THRESHOLD = 0.1;
+const TOO_CLOSE_TO_CAMERA_THRESHOLD = 0.1;
+const FORWARD_LEANING_THRESHOLD = 0.1;
+const TILTED_HEAD_THRESHOLD = 0.1;
+const LONG_SCREEN_TIME_THRESHOLD = 0.1;
 
 // Left:x > Right:x
 // Shoulder:y > Nose:y
@@ -20,16 +20,16 @@ export function anti_slouching(good_reference, bad_reference, current) {
   var good_reference_score = calculate_score(good_reference);
   var bad_reference_score = calculate_score(bad_reference);
   var current_score = calculate_score(current);
-  var good_bad_midpoint = (good_reference_score + bad_reference_score) / 2;
+  var good_bad_threshold = (good_reference_score + bad_reference_score) / 2;
 
   console.log(
     good_reference_score,
     bad_reference_score,
     current_score,
-    good_bad_midpoint
+    good_bad_threshold
   );
 
-  if (current_score < good_bad_midpoint) {
+  if (current_score < good_bad_threshold) {
     trigger_notification(
       "Anti-slouching Warning",
       "Slouching detected. Please sit up straight!"
@@ -37,37 +37,78 @@ export function anti_slouching(good_reference, bad_reference, current) {
   }
 }
 
-function too_close_to_camera(reference, current) {
-  var reference_score = reference.leftShoulder.x - reference.rightShoulder.x;
-  var current_score = current.leftShoulder.x - current.rightShoulder.x;
-  if (current_score - reference_score > TOO_CLOSE_TO_CAMERA_THRESHOLD) {
-    return true;
-  } else {
-    return false;
+export function too_close_to_camera(good_reference, current) {
+  // Larger score is worse
+  var calculate_score = (keypoints) => {
+    return keypoints.leftShoulder.x - keypoints.rightShoulder.x;
+  };
+  var good_reference_score = calculate_score(good_reference);
+  var current_score = calculate_score(current);
+  var good_bad_threshold =
+    good_reference_score * (1 + TOO_CLOSE_TO_CAMERA_THRESHOLD);
+
+  console.log(good_reference_score, current_score, good_bad_threshold);
+
+  if (current_score > good_bad_threshold) {
+    trigger_notification(
+      "Too Close To Camera Warning",
+      "Getting too close to camera detected. Please move back!"
+    );
   }
 }
 
-function forward_leaning(reference, current) {
-  var reference_score =
-    (reference.leftEye - reference.rightEye) /
-    (reference.leftShoulder.x - reference.rightShoulder.x);
-  var current_score =
-    (current.leftEye - current.rightEye) /
-    (current.leftShoulder.x - current.rightShoulder.x);
-  if (current_score - reference_score > TOO_CLOSE_TO_CAMERA_THRESHOLD) {
-    return true;
-  } else {
-    return false;
+export function forward_leaning(good_reference, bad_reference, current) {
+  // Larger score is worse
+  var calculate_score = (keypoints) => {
+    return (
+      (keypoints.leftEye - keypoints.rightEye) /
+      (keypoints.leftShoulder.x - keypoints.rightShoulder.x)
+    );
+  };
+  var good_reference_score = calculate_score(good_reference);
+  var bad_reference_score = calculate_score(bad_reference);
+  var current_score = calculate_score(current);
+  var good_bad_threshold = (good_reference_score + bad_reference_score) / 2;
+
+  console.log(
+    good_reference_score,
+    bad_reference_score,
+    current_score,
+    good_bad_threshold
+  );
+
+  if (current_score > good_bad_threshold) {
+    trigger_notification(
+      "Forward-leaning Warning",
+      "Forward-leaning detected. Please lean back!"
+    );
   }
 }
 
-function tilted_head(reference, current) {
-  var right_score = current.rightShoulder.y - reference.rightEar.y;
-  var left_score = current.leftShoulder.y - current.leftEar.y;
-  if (Math.abs(right_score - left_score) > TILTED_HEAD_THRESHOLD) {
-    return true;
-  } else {
-    return false;
+export function tilted_head(good_reference, current) {
+  // More unequal is worse
+  var calculate_score = (keypoints) => {
+    var right_score = current.rightShoulder.y - reference.rightEar.y;
+    var left_score = current.leftShoulder.y - current.leftEar.y;
+    return Math.abs(right_score - left_score);
+  };
+
+  var good_reference_score = calculate_score(good_reference);
+  var current_score = calculate_score(current);
+  var good_bad_threshold = good_reference_score * (1 + TILTED_HEAD_THRESHOLD);
+
+  console.log(
+    good_reference_score,
+    bad_reference_score,
+    current_score,
+    good_bad_threshold
+  );
+
+  if (current_score > good_bad_threshold) {
+    trigger_notification(
+      "Tilted-head Warning",
+      "Tilted-head detected. Please place your head straight!"
+    );
   }
 }
 
