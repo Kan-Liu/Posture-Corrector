@@ -55,46 +55,29 @@ export class Notifications extends React.Component {
   }
 
   generateNotification() {
-    var message = '';
     var postureTime = this.state.notificationsPostureTime;
     var validTime = true;
 
     if (this.state.postureEnabled) {
-      console.log(!isNaN(''));
       if (!isNaN(postureTime) && Math.floor(postureTime) > 0 && postureTime !== '') {
-        message += `Setting posture notifications to repeat every ${postureTime} minutes. `;
+        var message = `Setting posture notifications to repeat every ${postureTime} minutes. `;
         this.props.setPostureTime(postureTime);
+        this.displayNotification("Updated notification preferences", message, "default");
       } else {
-        validTime = false;
+        this.timeSetError();
       }
-    } else {
-      this.props.setPostureTime(-1);
-    }
-
-    if (validTime === false) {
-      this.noTimeSpecifiedNotification();
-    }
-
-    if (message !== '') {
-      store.addNotification({
-        title: "Updated notification preferences",
-        message: `${message}`,
-        type: "default",
-        container: "bottom-left",
-        animationIn: ["animated", "fadeIn"],
-        animationOut: ["animated", "fadeOut"],
-        dismiss: {
-          duration: 5000,
-        },
-      });
     }
   }
 
-  noTimeSpecifiedNotification() {
+  timeSetError() {
+    this.displayNotification("Error!", "Please specify a valid time in minutes", "danger");
+  }
+
+  displayNotification(title, message, type) {
     store.addNotification({
-      title: "Error!",
-      message: `Please specify a valid time in minutes`,
-      type: "danger",
+      title: title,
+      message: message,
+      type: type,
       container: "bottom-left",
       animationIn: ["animated", "fadeIn"],
       animationOut: ["animated", "fadeOut"],
