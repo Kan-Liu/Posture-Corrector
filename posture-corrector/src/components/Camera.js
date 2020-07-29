@@ -20,12 +20,21 @@ export const Camera = () => {
   const [lastButton, setLastButton] = React.useState(null);
   const [lastImage, setLastImage] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [imgTimeout, setImgTimeout] = React.useState(750);
 
   const capture = React.useCallback(async () => {
     console.log("Received user media!");
     const imageSrc = webcamRef.current.getScreenshot();
     setWebcamEnabled(false);
     setLastImage(imageSrc);
+    if (!imageSrc) {
+      console.log("Timed out, doubling timeout");
+      setImgTimeout(imgTimeout * 2);
+      setWebcamEnabled(false);
+      return setTimeout(() => {
+        setWebcamEnabled(true);
+      }, 200);
+    }
 
     const img = new Image();
     img.src = imageSrc;
@@ -89,7 +98,7 @@ export const Camera = () => {
             ref={webcamRef}
             videoConstraints={videoConstraints}
             onUserMedia={() => {
-              setTimeout(capture, 1500);
+              setTimeout(capture, imgTimeout);
             }}
           />
         ) : (
