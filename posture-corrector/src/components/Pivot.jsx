@@ -12,10 +12,11 @@ export const PivotBar = (props) => {
   const {
     setPostureTime,
     postureTime,
+    goodReference,
+    setGoodReference,
+    badReference,
+    setBadReference
   } = props;
-
-      console.log(props);
-
 
   return (
     <Pivot aria-label="Menu Pivot">
@@ -28,6 +29,10 @@ export const PivotBar = (props) => {
       >
         <Camera
           postureTime={postureTime}
+          goodReference={goodReference}
+          setGoodReference={setGoodReference}
+          badReference={badReference}
+          setBadReference={setBadReference}
         />
       </PivotItem>
       <PivotItem headerText="Notifications Preferences">
