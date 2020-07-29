@@ -39,11 +39,17 @@ export class Notifications extends React.Component {
         >
           Simulate notification
         </PrimaryButton>
+        <PrimaryButton onClick={this.generateNotification()}></PrimaryButton>
       </div>
     );
   }
 
   setNewRepeatingNotification() {
       setInterval()
+  }
+
+  generateNotification() {
+    const newNot = new Notification('Title', {body: 'hi'});
+    console.log('hello');
   }
 }
