@@ -11,7 +11,11 @@ const videoConstraints = {
   facingMode: "user",
 };
 
-export const Camera = () => {
+export const Camera = (props) => {
+  const {
+    postureTime,
+  } = props;
+
   const webcamRef = React.useRef(null);
   const stackTokens = { childrenGap: 40 };
   const [webcamEnabled, setWebcamEnabled] = React.useState(false);
@@ -64,6 +68,21 @@ export const Camera = () => {
     setLastButton(type);
     setWebcamEnabled(true);
   };
+
+  let postureIntervalId;
+
+  React.useEffect(() => {
+    console.log(postureTime);
+    if(goodReference && badReference && postureTime !== -1) {
+      postureIntervalId = setInterval(
+        onCaptureClick("capture")
+      , postureTime * 1000 * 5);
+    }
+
+    return (
+      clearInterval(postureIntervalId)
+    );
+  });
 
   return (
     <>

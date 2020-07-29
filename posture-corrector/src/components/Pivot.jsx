@@ -11,10 +11,11 @@ const labelStyles = {
 export const PivotBar = (props) => {
   const {
     setPostureTime,
-    setStagnantTime,
     postureTime,
-    stagnantTime
   } = props;
+
+      console.log(props);
+
 
   return (
     <Pivot aria-label="Menu Pivot">
@@ -25,15 +26,15 @@ export const PivotBar = (props) => {
           'data-title': 'Posture Camera Title',
         }}
       >
-        <Camera/>
+        <Camera
+          postureTime={postureTime}
+        />
       </PivotItem>
       <PivotItem headerText="Notifications Preferences">
         <Label styles={labelStyles}>Choose which reminders you want to receive</Label>
         <Notifications 
          setPostureTime={setPostureTime}
-         setStagnantTime={setStagnantTime}
          postureTime={postureTime}
-         stagnantTime={stagnantTime}
         />
       </PivotItem>
     </Pivot>

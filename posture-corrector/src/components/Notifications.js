@@ -12,11 +12,9 @@ export class Notifications extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      postureEnabled: false,
-      stagnantEnabled: false,
+      postureEnabled: this.props.postureTime !== -1 ? true : false,
       notificationsPostureTime: null,
-      notificationsStagnantTime: null
-    };
+    }
   }
 
   render() {
@@ -24,6 +22,7 @@ export class Notifications extends React.Component {
       <div className="notifications-container">
         <Stack horizontal tokens={stackTokens} verticalAlign="start" className="notifications">
           <Toggle 
+            checked={this.state.postureEnabled}
             onChange={this.handlePostureToggle}
             label="Receive posture check notifications" 
             onText="Yes" offText="No" />
@@ -32,17 +31,6 @@ export class Notifications extends React.Component {
             onChange={this.handlePostureChange}
             label="Frequency of notifications in minutes" 
             id={"posture-notification-title"} />
-        </Stack>
-
-        <Stack horizontal tokens={stackTokens} verticalAlign="start" className="notifications">
-          <Toggle 
-            onChange={this.handleStagnantToggle}
-            label="Receive stagnant position notifications" 
-            onText="Yes" offText="No" />
-          <TextField
-            value={this.state.stagnantTime}
-            onChange={this.handleStagnantChange}
-            label="Frequency of notifications in minutes" id={"stagnant-notification-title"} />
         </Stack>
 
         <PrimaryButton
@@ -61,17 +49,8 @@ export class Notifications extends React.Component {
     this.setState({postureEnabled: checked});
   }
 
-  handleStagnantToggle = (ev, checked) => {
-    this.setState({stagnantEnabled: checked});
-  }
-
   handlePostureChange = (event) => {
     this.setState({notificationsPostureTime: event.target.value});
-
-  }
-
-  handleStagnantChange = (event) => {
-    this.setState({notificationsStagnantTime: event.target.value});
 
   }
 
@@ -90,18 +69,6 @@ export class Notifications extends React.Component {
       }
     } else {
       this.props.setPostureTime(-1);
-    }
-
-    if (this.state.stagnantEnabled) {
-      if (!isNaN(stagnantTime) && stagnantTime !== null) {
-        message += `Setting stagnant notifications to repeat every ${this.state.notificationsStagnantTime} minutes. `;
-        this.props.setStagnantTime(this.state.notificationsStagnantTime);
-        validTime = true;
-      } else {
-        validTime = false;
-      }
-    } else {
-      this.props.setStagnantTime(-1);
     }
 
     if (validTime === false) {
