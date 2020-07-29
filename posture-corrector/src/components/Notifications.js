@@ -13,7 +13,7 @@ export class Notifications extends React.Component {
     super(props);
     this.state = {
       postureEnabled: this.props.postureTime !== -1 ? true : false,
-      notificationsPostureTime: null,
+      notificationsPostureTime: '',
     }
   }
 
@@ -61,7 +61,8 @@ export class Notifications extends React.Component {
     var validTime = true;
 
     if (this.state.postureEnabled) {
-      if (!isNaN(postureTime) && postureTime !== null) {
+      console.log(!isNaN(''));
+      if (!isNaN(postureTime) && Math.floor(postureTime) > 0 && postureTime !== '') {
         message += `Setting posture notifications to repeat every ${this.state.notificationsPostureTime} minutes. `;
         this.props.setPostureTime(this.state.notificationsPostureTime);
       } else {
@@ -96,7 +97,7 @@ export class Notifications extends React.Component {
   noTimeSpecifiedNotification() {
     store.addNotification({
       title: "Error!",
-      message: `Please specify a time in minutes`,
+      message: `Please specify a valid time in minutes`,
       type: "danger",
       container: "bottom-left",
       animationIn: ["animated", "fadeIn"],
