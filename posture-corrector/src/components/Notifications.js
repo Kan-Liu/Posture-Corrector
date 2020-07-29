@@ -2,7 +2,7 @@ import React, { createRef } from "react";
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import { store } from "react-notifications-component";
-import { DefaultButton, PrimaryButton, Stack } from 'office-ui-fabric-react';
+import { PrimaryButton, Stack } from 'office-ui-fabric-react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
@@ -57,14 +57,13 @@ export class Notifications extends React.Component {
   generateNotification() {
     var message = '';
     var postureTime = this.state.notificationsPostureTime;
-    var stagnantTime = this.state.notificationsStagnantTime;
     var validTime = true;
 
     if (this.state.postureEnabled) {
       console.log(!isNaN(''));
       if (!isNaN(postureTime) && Math.floor(postureTime) > 0 && postureTime !== '') {
-        message += `Setting posture notifications to repeat every ${this.state.notificationsPostureTime} minutes. `;
-        this.props.setPostureTime(this.state.notificationsPostureTime);
+        message += `Setting posture notifications to repeat every ${postureTime} minutes. `;
+        this.props.setPostureTime(postureTime);
       } else {
         validTime = false;
       }
@@ -88,9 +87,6 @@ export class Notifications extends React.Component {
           duration: 5000,
         },
       });
-      
-      const newNot = new Notification(`We've updated your notifications for the Posture App`, 
-        {body: `You will now receive posture notifications...`});
     }
   }
 
