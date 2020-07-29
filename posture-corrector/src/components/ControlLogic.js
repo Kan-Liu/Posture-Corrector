@@ -12,10 +12,9 @@ const LONG_SCREEN_TIME_THRESHOLD = 0.1;
 export function anti_slouching(good_reference, bad_reference, current) {
   // Smaller score is worse
   var calculate_score = (keypoints) => {
-    return (
-      (keypoints.rightShoulder.y + keypoints.leftShoulder.y) / 2 -
-      keypoints.nose.y
-    );
+    const shoulderWidth = keypoints.leftShoulder.x - keypoints.rightShoulder.x; 
+    const noseToShoulderDistance = (keypoints.leftShoulder.y + keypoints.rightShoulder.y) / 2 - keypoints.nose.y;
+    return noseToShoulderDistance / shoulderWidth;
   };
   var good_reference_score = calculate_score(good_reference);
   var bad_reference_score = calculate_score(bad_reference);
@@ -31,8 +30,8 @@ export function anti_slouching(good_reference, bad_reference, current) {
 
   if (current_score < good_bad_threshold) {
     trigger_notification(
-      "Anti-slouching Warning",
-      "Slouching detected. Please sit up straight!"
+      "Slouching Warning",
+      "Detected slouching — please sit up straight!"
     );
   }
 }
@@ -86,23 +85,21 @@ export function forward_leaning(good_reference, bad_reference, current) {
 }
 
 export function tilted_head(good_reference, current) {
-  // More unequal is worse
+  // More higher than zero is worse
   var calculate_score = (keypoints) => {
-    var right_score = keypoints.rightShoulder.y - keypoints.rightEar.y;
-    var left_score = keypoints.leftShoulder.y - keypoints.leftEar.y;
-    return Math.abs(right_score - left_score);
+    return Math.abs(keypoints.rightEar.y - keypoints.leftEar.y);
   };
 
   var good_reference_score = calculate_score(good_reference);
   var current_score = calculate_score(current);
-  var good_bad_threshold = good_reference_score * (1 + TILTED_HEAD_THRESHOLD);
+  var good_bad_threshold = Math.max(good_reference_score * (1 + TILTED_HEAD_THRESHOLD), 20); // some % more of reference score
 
-  console.log(good_reference_score, current_score, good_bad_threshold);
+  console.log("Head tilt:", good_reference_score, current_score, good_bad_threshold);
 
   if (current_score > good_bad_threshold) {
     trigger_notification(
       "Tilted-head Warning",
-      "Tilted-head detected. Please place your head straight!"
+      "Detected unnatural head tilt. Please keep your head level!"
     );
   }
 }
