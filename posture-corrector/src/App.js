@@ -1,14 +1,22 @@
 import React from 'react';
 import './App.css';
+import { PivotBar } from './components/Pivot.jsx';
 import ReactNotifications from 'react-notifications-component';
-import { Notifications } from './components/Notifications';
-import { PivotBar } from './components/Pivot.tsx';
 
 function App() {
+  const [postureTime, setPostureTime] = React.useState(-1); // -1 means notifications not enabled
+  const [stagnantTime, setStagnantTime] = React.useState(-1);
+  
   return (
     <div className="App">
       <ReactNotifications/>
-      <PivotBar/>
+
+      <PivotBar 
+        setPostureTime={setPostureTime}
+        setStagnantTime={setStagnantTime}
+        postureTime={postureTime}
+        stagnantTime={stagnantTime}
+      />
     </div>
   );
 }

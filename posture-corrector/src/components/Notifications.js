@@ -9,16 +9,14 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 const stackTokens = { childrenGap: 30 };
 
 export class Notifications extends React.Component {
-
   constructor(props) {
     super(props);
-
     this.state = {
       postureEnabled: false,
       stagnantEnabled: false,
-      postureTime: 'Enter a number',
-      stagnantTime: 'Enter a number',
-    };
+      notificationsPostureTime: null,
+      notificationsStagnantTime: null
+    }
   }
 
   render() {
@@ -32,7 +30,6 @@ export class Notifications extends React.Component {
           <TextField 
             value={this.state.postureTime}
             onChange={this.handlePostureChange}
-            onClick={this.handlePostureClick}
             label="Frequency of notifications in minutes" 
             id={"posture-notification-title"} />
         </Stack>
@@ -45,7 +42,6 @@ export class Notifications extends React.Component {
           <TextField
             value={this.state.stagnantTime}
             onChange={this.handleStagnantChange}
-            onClick={this.handleStagnantClick}
             label="Frequency of notifications in minutes" id={"stagnant-notification-title"} />
         </Stack>
 
@@ -54,61 +50,47 @@ export class Notifications extends React.Component {
             this.generateNotification()
           }}
         >
-          Simulate notification
+          Save settings
         </PrimaryButton>
       </div>
     );
   }
-
-  _onChange(ev, checked) {
-    console.log('toggle is ' + (checked ? 'checked' : 'not checked'));
-  }
   
   // ev is of type React.MouseEvent<HTMLElement> btw!
   handlePostureToggle = (ev, checked) => {
-    this.setState({
-      postureEnabled: checked,
-    });
+    this.setState({postureEnabled: checked});
   }
 
   handleStagnantToggle = (ev, checked) => {
-    this.setState({
-      stagnantEnabled: checked,
-    });  
+    this.setState({stagnantEnabled: checked});
   }
 
   handlePostureChange = (event) => {
-    this.setState({
-      postureTime: event.target.value,
-    });
+    this.setState({notificationsPostureTime: event.target.value});
+
   }
 
   handleStagnantChange = (event) => {
-    this.setState({
-      stagnantTime: event.target.value,
-    })
-  }
+    this.setState({notificationsStagnantTime: event.target.value});
 
-  handlePostureClick = () => {
-    this.setState({
-      postureTime:'',
-    });
-  }
-
-  handleStagnantClick = () => {
-    this.setState({
-      stagnantTime:'',
-    })
   }
 
   generateNotification() {
     var message = '';
     if (this.state.postureEnabled) {
-      message += `Setting posture notifications to repeat every ${this.state.postureTime} minutes. `;
+      message += `Setting posture notifications to repeat every ${this.state.notificationsPostureTime} minutes.`;
+      this.props.setPostureTime(this.state.notificationsPostureTime);
+    } else {
+      this.props.setPostureTime(-1);
+
     }
     if (this.state.stagnantEnabled) {
-      message += `Setting stagnant notifications to repeat every ${this.state.stagnantTime} minutes. `;
+      message += `Setting stagnant notifications to repeat every ${this.state.notificationsStagnantTime} minutes. `;
+      this.props.setStagnantTime(this.state.notificationsStagnantTime);
+    } else {
+      this.props.setStagnantTime(-1);
     }
+
     if (message !== '') {
       store.addNotification({
         title: "Updated notification preferences",
@@ -121,6 +103,7 @@ export class Notifications extends React.Component {
           duration: 5000,
         },
       });
+      
       const newNot = new Notification(`We've updated your notifications for the Posture App`, 
         {body: `You will now receive posture notifications...`});
     }
