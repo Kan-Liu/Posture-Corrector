@@ -4,6 +4,7 @@ import "../App.css";
 import Sketch from "react-p5";
 import * as PoseDetection from "../backend/PoseDetection";
 import { PrimaryButton, CompoundButton, Stack } from "office-ui-fabric-react";
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import * as ControlLogic from "./ControlLogic";
 
 const videoConstraints = {
@@ -18,34 +19,48 @@ export const Camera = () => {
   const [badReference, setBadReference] = React.useState(null);
   const [lastButton, setLastButton] = React.useState(null);
   const [lastImage, setLastImage] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [imgTimeout, setImgTimeout] = React.useState(750);
 
   const capture = React.useCallback(async () => {
     console.log("Received user media!");
     const imageSrc = webcamRef.current.getScreenshot();
     setWebcamEnabled(false);
     setLastImage(imageSrc);
+    if (!imageSrc) {
+      console.log("Timed out, doubling timeout");
+      setImgTimeout(imgTimeout * 2);
+      setWebcamEnabled(false);
+      return setTimeout(() => {
+        setWebcamEnabled(true);
+      }, 200);
+    }
 
     const img = new Image();
     img.src = imageSrc;
-    img.onload = async () => {
+    img.onload = () => {
       console.log("Loaded image!");
-      var keypoints = await PoseDetection.returnPose(img);
-      console.log(keypoints);
-      if (lastButton === "capture") {
-        ControlLogic.anti_slouching(goodReference, badReference, keypoints);
-        ControlLogic.too_close_to_camera(goodReference, keypoints);
-        ControlLogic.forward_leaning(goodReference, badReference, keypoints);
-        ControlLogic.tilted_head(goodReference, keypoints);
-      } else if (lastButton === "goodReference") {
-        setGoodReference(keypoints);
-      } else if (lastButton === "badReference") {
-        setBadReference(keypoints);
-      }
+      setTimeout(async () => {
+        var keypoints = await PoseDetection.returnPose(img);
+        console.log(keypoints);
+        if (lastButton === "capture") {
+          ControlLogic.anti_slouching(goodReference, badReference, keypoints);
+          ControlLogic.too_close_to_camera(goodReference, keypoints);
+          ControlLogic.forward_leaning(goodReference, badReference, keypoints);
+          ControlLogic.tilted_head(goodReference, keypoints);
+        } else if (lastButton === "goodReference") {
+          setGoodReference(keypoints);
+        } else if (lastButton === "badReference") {
+          setBadReference(keypoints);
+        }
+        setIsLoading(false);
+      }, 50);
     };
   }, [webcamRef, goodReference, badReference, lastButton]);
 
   const onCaptureClick = function (type) {
     console.log(type);
+    setIsLoading(true);
     setLastButton(type);
     setWebcamEnabled(true);
   };
@@ -56,17 +71,20 @@ export const Camera = () => {
         <Stack horizontal tokens={stackTokens}>
           <CompoundButton
             onClick={() => onCaptureClick("badReference")}
-            secondaryText="The posture you wish to erase"
+            secondaryText="Hunched shoulders, leaning forward"
           >
-            Capture your normal pose
+            1. Capture your undesired posture
           </CompoundButton>
-          <CompoundButton
-            primary
-            onClick={() => onCaptureClick("goodReference")}
-            secondaryText="Shoulders straight, arms relaxed"
-          >
-            Capture your desired pose
-          </CompoundButton>
+
+          {badReference && (
+            <CompoundButton
+              primary
+              onClick={() => onCaptureClick("goodReference")}
+              secondaryText="Shoulders straight, arms relaxed"
+            >
+              2. Capture your desired posture
+            </CompoundButton>
+          )}
         </Stack>
 
         <div style={{ paddingBottom: "3vh" }}></div>
@@ -80,20 +98,26 @@ export const Camera = () => {
             ref={webcamRef}
             videoConstraints={videoConstraints}
             onUserMedia={() => {
-              setTimeout(capture, 2000);
+              setTimeout(capture, imgTimeout);
             }}
           />
         ) : (
-          <img src={lastImage} />
+          <img src={lastImage} className={isLoading ? "grayed-out" : ""} />
         )}
+        {!webcamEnabled && isLoading && (<>
+          <div style={{ paddingBottom: "3vh" }}></div>
+          <Spinner size={SpinnerSize.large} label="Processing image..." />
+        </>)}
       </div>
 
       <div style={{ paddingBottom: "3vh" }}></div>
 
-      <PrimaryButton
-        text="Capture Photo"
-        onClick={() => onCaptureClick("capture")}
-      />
+      {(goodReference && badReference) && (
+        <PrimaryButton
+          text="Process Posture"
+          onClick={() => onCaptureClick("capture")}
+        />
+      )}
     </>
   );
 };
