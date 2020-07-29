@@ -1,7 +1,10 @@
 .App {
   text-align: center;
   justify-content: center;
+}
 
+body {
+  background-color: #e6f0f8;
 }
 
 /* Camera */
