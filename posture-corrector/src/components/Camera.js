@@ -4,6 +4,7 @@ import "../App.css";
 import Sketch from "react-p5";
 import * as PoseDetection from "../backend/PoseDetection";
 import { PrimaryButton, CompoundButton, Stack } from "office-ui-fabric-react";
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import * as ControlLogic from "./ControlLogic";
 
 const videoConstraints = {
@@ -18,6 +19,7 @@ export const Camera = () => {
   const [badReference, setBadReference] = React.useState(null);
   const [lastButton, setLastButton] = React.useState(null);
   const [lastImage, setLastImage] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const capture = React.useCallback(async () => {
     console.log("Received user media!");
@@ -42,12 +44,14 @@ export const Camera = () => {
         } else if (lastButton === "badReference") {
           setBadReference(keypoints);
         }
+        setIsLoading(false);
       }, 50);
     };
   }, [webcamRef, goodReference, badReference, lastButton]);
 
   const onCaptureClick = function (type) {
     console.log(type);
+    setIsLoading(true);
     setLastButton(type);
     setWebcamEnabled(true);
   };
@@ -85,12 +89,16 @@ export const Camera = () => {
             ref={webcamRef}
             videoConstraints={videoConstraints}
             onUserMedia={() => {
-              setTimeout(capture, 2000);
+              setTimeout(capture, 1500);
             }}
           />
         ) : (
-          <img src={lastImage} />
+          <img src={lastImage} className={isLoading ? "grayed-out" : ""} />
         )}
+        {!webcamEnabled && isLoading && (<>
+          <div style={{ paddingBottom: "3vh" }}></div>
+          <Spinner size={SpinnerSize.large} label="Processing image..." />
+        </>)}
       </div>
 
       <div style={{ paddingBottom: "3vh" }}></div>
