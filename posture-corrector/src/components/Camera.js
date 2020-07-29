@@ -14,13 +14,15 @@ const videoConstraints = {
 export const Camera = (props) => {
   const {
     postureTime,
+    goodReference,
+    setGoodReference,
+    badReference,
+    setBadReference
   } = props;
 
   const webcamRef = React.useRef(null);
   const stackTokens = { childrenGap: 40 };
   const [webcamEnabled, setWebcamEnabled] = React.useState(false);
-  const [goodReference, setGoodReference] = React.useState(null);
-  const [badReference, setBadReference] = React.useState(null);
   const [lastButton, setLastButton] = React.useState(null);
   const [lastImage, setLastImage] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -28,6 +30,10 @@ export const Camera = (props) => {
 
   const capture = React.useCallback(async () => {
     console.log("Received user media!");
+    if(!webcamRef || !webcamRef.current) {
+      console.warn('called with null webcam ref');
+      return;
+    }
     const imageSrc = webcamRef.current.getScreenshot();
     setWebcamEnabled(false);
     setLastImage(imageSrc);
@@ -72,15 +78,15 @@ export const Camera = (props) => {
   let postureIntervalId;
 
   React.useEffect(() => {
-    console.log(postureTime);
     if(goodReference && badReference && postureTime !== -1) {
-      postureIntervalId = setInterval(
+      postureIntervalId = setInterval(() => {
         onCaptureClick("capture")
-      , postureTime * 1000 * 5);
+      }
+      , postureTime * 1000 * 60);
     }
 
     return (
-      clearInterval(postureIntervalId)
+      () => clearInterval(postureIntervalId)
     );
   });
 

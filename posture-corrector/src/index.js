@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+Notification.requestPermission();
 ReactDOM.render(
   <React.StrictMode>
     <App />
