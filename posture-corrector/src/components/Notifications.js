@@ -77,18 +77,35 @@ export class Notifications extends React.Component {
 
   generateNotification() {
     var message = '';
+    var postureTime = this.state.notificationsPostureTime;
+    var stagnantTime = this.state.notificationsStagnantTime;
+    var validTime = true;
+
     if (this.state.postureEnabled) {
-      message += `Setting posture notifications to repeat every ${this.state.notificationsPostureTime} minutes.`;
-      this.props.setPostureTime(this.state.notificationsPostureTime);
+      if (!isNaN(postureTime) && postureTime !== null) {
+        message += `Setting posture notifications to repeat every ${this.state.notificationsPostureTime} minutes. `;
+        this.props.setPostureTime(this.state.notificationsPostureTime);
+      } else {
+        validTime = false;
+      }
     } else {
       this.props.setPostureTime(-1);
-
     }
+
     if (this.state.stagnantEnabled) {
-      message += `Setting stagnant notifications to repeat every ${this.state.notificationsStagnantTime} minutes. `;
-      this.props.setStagnantTime(this.state.notificationsStagnantTime);
+      if (!isNaN(stagnantTime) && stagnantTime !== null) {
+        message += `Setting stagnant notifications to repeat every ${this.state.notificationsStagnantTime} minutes. `;
+        this.props.setStagnantTime(this.state.notificationsStagnantTime);
+        validTime = true;
+      } else {
+        validTime = false;
+      }
     } else {
       this.props.setStagnantTime(-1);
+    }
+
+    if (validTime === false) {
+      this.noTimeSpecifiedNotification();
     }
 
     if (message !== '') {
@@ -107,5 +124,19 @@ export class Notifications extends React.Component {
       const newNot = new Notification(`We've updated your notifications for the Posture App`, 
         {body: `You will now receive posture notifications...`});
     }
+  }
+
+  noTimeSpecifiedNotification() {
+    store.addNotification({
+      title: "Error!",
+      message: `Please specify a time in minutes`,
+      type: "danger",
+      container: "bottom-left",
+      animationIn: ["animated", "fadeIn"],
+      animationOut: ["animated", "fadeOut"],
+      dismiss: {
+        duration: 5000,
+      },
+    });
   }
 }
