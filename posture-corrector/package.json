@@ -44,6 +44,6 @@
   },
   "devDependencies": {
     "@tensorflow-models/posenet": "^2.2.1",
-    "electron": "^7.2.4"
+    "electron": "^18.3.7"
   }
 }
